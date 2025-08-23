@@ -1,3 +1,5 @@
+Supports any Arduino board.
+
 The program uses a simple algorithm which I learned from some Python book.
 
 1. Check if the AI can win in one move.
