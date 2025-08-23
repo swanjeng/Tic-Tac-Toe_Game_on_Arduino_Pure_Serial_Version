@@ -25,7 +25,7 @@ void showBoard() {
   for (int i = 0 ; i < 3 ; i ++) {
     Serial.print("|");
     for (int j = 0 ; j < 3 ; j ++) {
-      if (board[i][j] == 0) Serial.print(" ");
+      if (board[i][j] == 0) Serial.print(10 - (3 * i + (3 - j)));
       else if (board[i][j] == 1) Serial.print("O");
       else Serial.print("X");
       Serial.print("|");
@@ -60,17 +60,21 @@ bool checkWin(int player) {
 }
 
 void getAIMove() {
-  for (int i = 0 ; i < 9 ; i ++) {
+  for (int i = 1 ; i <= 9 ; i ++) {
     if (!valid(String(i), "place")) continue;
     board[2-(i-1)/3][(i-1)%3] = AI;
-    if (checkWin(AI)) return;
+    if (checkWin(AI)) {
+      Serial.println("I choose " + String(i) + "!");
+      return;
+    }
     board[2-(i-1)/3][(i-1)%3] = 0;
   }
-  for (int i = 0 ; i < 9 ; i ++) {
+  for (int i = 1 ; i <= 9 ; i ++) {
     if (!valid(String(i), "place")) continue;
     board[2-(i-1)/3][(i-1)%3] = HUMAN;
     if (checkWin(HUMAN)) {
       board[2-(i-1)/3][(i-1)%3] = AI;
+      Serial.println("I choose " + String(i) + "!");
       return;
     }
     board[2-(i-1)/3][(i-1)%3] = 0;
@@ -80,17 +84,20 @@ void getAIMove() {
     int x = order[i];
     if (valid(String(x), "place")) {
       board[2-(x-1)/3][(x-1)%3] = AI;
+      Serial.println("I choose " + String(order[i]) + "!");
       return;
     }
   }
 }
 
 void setup() {
+  // put your setup code here, to run once:
   Serial.begin(9600);
   delay(1000);
 }
 
 void loop() {
+  // put your main code here, to run repeatedly:
   if (firstRun) {
     Serial.println(F("Hello~ Let's play Tic-Tac-Toe~"));
     firstRun = 0;
@@ -121,7 +128,7 @@ void loop() {
       input = "";
       do {
         Serial.println(F("Enter an integer between 1 and 9"));
-        Serial.println(F("1 refers to the bottom left, and 9 refers to the top left"));
+        Serial.println(F("1 refers to the bottom left, and 9 refers to the top right."));
         while (!Serial.available());
         input = Serial.readStringUntil('\n');
         input.trim();
@@ -144,7 +151,7 @@ void loop() {
   
   input = "";
   do {
-    Serial.println(F("Wanna play again? Yes or no"));
+    Serial.println(F("Wanna play again? Yes or No"));
     while (!Serial.available());
     input = Serial.readStringUntil('\n');
     input.trim();
