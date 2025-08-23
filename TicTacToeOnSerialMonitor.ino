@@ -145,9 +145,9 @@ void loop() {
     }
   }
   showBoard();
-  if (checkWin(AI)) Serial.println("I win!");
-  else if (checkWin(HUMAN)) Serial.println("You win!");
-  else Serial.println("Tie!");
+  if (checkWin(AI)) Serial.println("I win! Can you win next time? I wanna see~");
+  else if (checkWin(HUMAN)) Serial.println("Wow! You win!");
+  else Serial.println("It's a draw!");
   
   input = "";
   do {
