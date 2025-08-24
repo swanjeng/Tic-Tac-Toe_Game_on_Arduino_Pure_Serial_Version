@@ -59,6 +59,15 @@ bool checkWin(int player) {
   else return 0;
 }
 
+void shuffleArray(byte *array, int n, int x, int y) {
+  for (int i = y-1; i > x; i--) {
+    int j = random(x, i + 1);
+    byte temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+}
+
 void getAIMove() {
   for (int i = 1 ; i <= 9 ; i ++) {
     if (!valid(String(i), "place")) continue;
@@ -80,6 +89,8 @@ void getAIMove() {
     board[2-(i-1)/3][(i-1)%3] = 0;
   }
   byte order[9] = {7, 9, 1, 3, 8, 4, 6, 2, 5};
+  shuffleArray(order, 9, 0, 3);
+  shuffleArray(order, 9, 4, 7);
   for (int i = 0 ; i < 9 ; i ++) {
     int x = order[i];
     if (valid(String(x), "place")) {
@@ -91,13 +102,12 @@ void getAIMove() {
 }
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(9600);
   delay(1000);
+  randomSeed(analogRead(A0));
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   if (firstRun) {
     Serial.println(F("Hello~ Let's play Tic-Tac-Toe~"));
     firstRun = 0;
@@ -116,7 +126,7 @@ void loop() {
     input.trim();
     Serial.println("You: " + input);
     input.toLowerCase();
-    if (!valid(input, "yn")) Serial.println("invalid...");
+    if (!valid(input, "yn")) Serial.println("Did you say Yes or No?");
   } while (!valid(input, "yn"));
 
   if (input == "yes") whosTurn = HUMAN;
@@ -133,7 +143,7 @@ void loop() {
         input = Serial.readStringUntil('\n');
         input.trim();
         Serial.println("You: " + input);
-        if (!valid(input, "place")) Serial.println("invalid...");
+        if (!valid(input, "place")) Serial.println("I know what you want but that's an invalid position.");
       } while (!valid(input, "place"));
       int p = input.toInt();
       board[2-(p-1)/3][(p-1)%3] = whosTurn;
@@ -157,7 +167,7 @@ void loop() {
     input.trim();
     Serial.println("You: " + input);
     input.toLowerCase();
-    if (!valid(input, "yn")) Serial.println("invalid...");
+    if (!valid(input, "yn")) Serial.println("Huh? What does that mean?");
   } while (!valid(input, "yn"));
   if (input == "no") while (1);
 }
