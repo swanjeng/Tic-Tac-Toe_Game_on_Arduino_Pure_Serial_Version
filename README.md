@@ -1,4 +1,4 @@
-This program uses 54 KB of the Arduino's Flash and more than 6 KB of the SRAM, so it can only run on:
+This program uses 60 KB of the Arduino's Flash and more than 6 KB of the SRAM, so it can only run on:
 
 * Arduino Mega 2560 Rev3
 * Arduino Uno R4
